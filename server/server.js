@@ -6,6 +6,8 @@ import { clerkMiddleware } from '@clerk/express'
 import clerkWebhook from './controllers/clerkWebhooks.js';
 dotenv.config();
 console.log(process.env.MONGODB_URI);
+console.log("CLERK_PUBLISHABLE_KEY:", process.env.CLERK_PUBLISHABLE_KEY);
+
 connectDB();
 
 const app = express();
