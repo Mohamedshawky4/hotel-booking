@@ -16,6 +16,7 @@ const clerkWebhook = async (req, res) => {
             username:data.first_name+" "+data.last_name,
             email:data.email_address[0].email_address,
             image:data._url,
+            recentSearchedCities: []
         }
         //switch for diff events
         switch(type){
@@ -31,11 +32,11 @@ const clerkWebhook = async (req, res) => {
                 default:
                 break;
         }
-       res.JSON({success:true , message:"webhook verified"});
+       res.json({success:true , message:"webhook verified"});
     }
     catch(error){
         console.log(error.message);
-        res.JSON({success:false , message:"webhook not verified"});
+        res.json({success:false , message:"webhook not verified"});
     }
 }
 export default clerkWebhook;
