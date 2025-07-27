@@ -5,7 +5,7 @@ const connectDB = async () => {
         mongoose.connection.on("connected", () => {
             console.log("Mongoose is connected");
         })
-        console.log(process.env.MONGODB_URI);
+        // console.log(process.env.MONGODB_URI);
          await mongoose.connect(`${process.env.MONGODB_URI}/hotel-booking`);
          
        
