@@ -18,6 +18,7 @@ const clerkWebhook = async (req, res) => {
 
     console.log("✅ Webhook event type:", type);
     console.log("✅ Webhook data received:", data);
+    console.log("Received webhook event:", type, "with data:", data);
 
 const userData = {
   _id: data.id,
@@ -36,10 +37,11 @@ const userData = {
     switch (type) {
       case "user.created":
         try {
+          console.log("Attempting to create user in DB:", userData);
           const createdUser = await User.create(userData);
           console.log("✅ User created in DB:", createdUser);
         } catch (dbErr) {
-          console.error("❌ DB Create Error:", dbErr.message);
+          console.error("❌ DB Create Error:", dbErr); // log full error
         }
         break;
 
