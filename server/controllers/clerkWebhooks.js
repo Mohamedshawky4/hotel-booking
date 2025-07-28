@@ -8,52 +8,60 @@ const clerkWebhook = async (req, res) => {
     const headers = {
       "svix-id": req.headers["svix-id"],
       "svix-timestamp": req.headers["svix-timestamp"],
-      "svix-signature": req.headers["svix-signature"]
+      "svix-signature": req.headers["svix-signature"],
     };
 
-    // ✅ Convert raw buffer to string
     const payloadString = req.body.toString();
 
-    // ✅ Verify and extract Clerk event
     const evt = wh.verify(payloadString, headers);
     const { data, type } = evt;
 
-    console.log("Webhook event type:", type);
-    console.log("Webhook data:", data);
+    console.log("✅ Webhook event type:", type);
+    console.log("✅ Webhook data received:", data);
 
-    const userData = {
-      _id: data.id,
-      username: `${data.first_name} ${data.last_name}`,
-      email: data.email_addresses[0]?.email_address,
-      image: data.image_url,
-      recentSearchedCities: [],
-    };
+const userData = {
+  _id: data.id,
+  username: `${data.first_name || ""} ${data.last_name || ""}`.trim(),
+  email: data.email_addresses?.[0]?.email_address || "noemail@example.com", // fallback email
+  image: data.image_url || "https://via.placeholder.com/100", // fallback image
+  role: "user", // or assign dynamically
+  recentSearchedCities: [],
+};
+
+
+    if (!userData.email || !userData._id) {
+      console.log("⚠️ Missing required user fields", userData);
+    }
 
     switch (type) {
       case "user.created":
-        const newUser = await User.create(userData);
-        console.log("User created:", newUser);
+        try {
+          const createdUser = await User.create(userData);
+          console.log("✅ User created in DB:", createdUser);
+        } catch (dbErr) {
+          console.error("❌ DB Create Error:", dbErr.message);
+        }
         break;
 
       case "user.updated":
         await User.findByIdAndUpdate(data.id, userData);
-        console.log("User updated");
+        console.log("✅ User updated in DB");
         break;
 
       case "user.deleted":
         await User.findByIdAndDelete(data.id);
-        console.log("User deleted");
+        console.log("✅ User deleted from DB");
         break;
 
       default:
-        console.log("Unhandled event type");
+        console.log("ℹ️ Unhandled event type");
         break;
     }
 
     res.status(200).json({ success: true, message: "Webhook verified and handled" });
 
   } catch (error) {
-    console.error("Webhook error:", error.message);
+    console.error("❌ Webhook error:", error.message);
     res.status(400).json({ success: false, message: "Webhook not verified" });
   }
 };
