@@ -1,27 +1,32 @@
-import User from "../models/User.js";
 import { Webhook } from "svix";
+import User from "../models/User.js";
 
 const clerkWebhook = async (req, res) => {
   try {
-    const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
+    const wh = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
+
     const headers = {
       "svix-id": req.headers["svix-id"],
       "svix-timestamp": req.headers["svix-timestamp"],
       "svix-signature": req.headers["svix-signature"]
     };
 
-    await whook.verify(JSON.stringify(req.body), headers);
+    // ✅ Convert raw buffer to string
+    const payloadString = req.body.toString();
 
-    const { data, type } = req.body;
+    // ✅ Verify and extract Clerk event
+    const evt = wh.verify(payloadString, headers);
+    const { data, type } = evt;
+
     console.log("Webhook event type:", type);
     console.log("Webhook data:", data);
 
     const userData = {
       _id: data.id,
-      username: data.first_name + " " + data.last_name,
-      email: data.email_addresses[0].email_address,
+      username: `${data.first_name} ${data.last_name}`,
+      email: data.email_addresses[0]?.email_address,
       image: data.image_url,
-      recentSearchedCities: []
+      recentSearchedCities: [],
     };
 
     switch (type) {
@@ -29,20 +34,27 @@ const clerkWebhook = async (req, res) => {
         const newUser = await User.create(userData);
         console.log("User created:", newUser);
         break;
+
       case "user.updated":
         await User.findByIdAndUpdate(data.id, userData);
+        console.log("User updated");
         break;
+
       case "user.deleted":
         await User.findByIdAndDelete(data.id);
+        console.log("User deleted");
         break;
+
       default:
+        console.log("Unhandled event type");
         break;
     }
 
-    res.json({ success: true, message: "webhook verified" });
+    res.status(200).json({ success: true, message: "Webhook verified and handled" });
+
   } catch (error) {
-    console.log("Webhook error:", error.message);
-    res.status(400).json({ success: false, message: "webhook not verified" });
+    console.error("Webhook error:", error.message);
+    res.status(400).json({ success: false, message: "Webhook not verified" });
   }
 };
 
