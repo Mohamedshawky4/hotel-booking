@@ -1,14 +1,15 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: [
     "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}", // <== make sure this line is present
+    "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-   extend: {
+    extend: {
       fontFamily: {
-        playfair: ['"Playfair"', 'serif'],
-        outfit: ['"Outfit"', 'sans-serif'],
+        'playfair': ['Playfair Display', 'serif'],
+        'inter': ['Inter', 'sans-serif'],
+        'arabic': ['Cairo', 'sans-serif'],
       },
     },
   },

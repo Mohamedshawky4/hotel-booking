@@ -5,6 +5,144 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Arabic font import */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap');
+
+/* RTL Support */
+[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .rtl-flip {
+  transform: scaleX(-1);
+}
+
+/* Arabic font class */
+.font-arabic {
+  font-family: 'Cairo', sans-serif;
+}
+
+/* RTL specific adjustments */
+[dir="rtl"] .rtl-ml-auto {
+  margin-left: auto;
+}
+
+[dir="rtl"] .rtl-mr-auto {
+  margin-right: auto;
+}
+
+/* RTL flex direction adjustments */
+[dir="rtl"] .rtl-flex-row-reverse {
+  flex-direction: row-reverse;
+}
+
+/* RTL text alignment */
+[dir="rtl"] .rtl-text-right {
+  text-align: right;
+}
+
+[dir="rtl"] .rtl-text-left {
+  text-align: left;
+}
+
+/* RTL padding adjustments */
+[dir="rtl"] .rtl-pl-0 {
+  padding-left: 0;
+}
+
+[dir="rtl"] .rtl-pr-0 {
+  padding-right: 0;
+}
+
+/* RTL margin adjustments */
+[dir="rtl"] .rtl-ml-0 {
+  margin-left: 0;
+}
+
+[dir="rtl"] .rtl-mr-0 {
+  margin-right: 0;
+}
+
+/* RTL border adjustments */
+[dir="rtl"] .rtl-border-l-0 {
+  border-left: 0;
+}
+
+[dir="rtl"] .rtl-border-r-0 {
+  border-right: 0;
+}
+
+/* RTL specific spacing */
+[dir="rtl"] .rtl-space-x-reverse > * + * {
+  margin-right: 0.5rem;
+  margin-left: 0;
+}
+
+[dir="rtl"] .rtl-space-y-reverse > * + * {
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
+/* RTL grid adjustments */
+[dir="rtl"] .rtl-grid-cols-reverse {
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+}
+
+/* RTL transform adjustments */
+[dir="rtl"] .rtl-scale-x-reverse {
+  transform: scaleX(-1);
+}
+
+/* RTL transition adjustments */
+[dir="rtl"] .rtl-translate-x-reverse {
+  transform: translateX(-100%);
+}
+
+/* RTL hover effects */
+[dir="rtl"] .rtl-hover-translate-x-reverse:hover {
+  transform: translateX(-0.25rem);
+}
+
+/* RTL focus adjustments */
+[dir="rtl"] .rtl-focus-ring-reverse:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+/* RTL animation adjustments */
+[dir="rtl"] .rtl-animate-slide-in-right {
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* RTL responsive adjustments */
+@media (max-width: 768px) {
+  [dir="rtl"] .rtl-md-text-right {
+    text-align: right;
+  }
+  
+  [dir="rtl"] .rtl-md-text-left {
+    text-align: left;
+  }
+}
+
+/* RTL print styles */
+@media print {
+  [dir="rtl"] {
+    direction: rtl;
+  }
+}
+
 
 * {
   font-family: 'Outfit', sans-serif;

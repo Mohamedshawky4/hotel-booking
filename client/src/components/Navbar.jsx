@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { assets } from '../assets/assets';
-import { useClerk, useUser, UserButton } from '@clerk/clerk-react';
+import { useClerk, UserButton } from '@clerk/clerk-react';
+import { useAppContext } from '../context/AppContext';
+import { useLanguage } from '../context/LanguageContext';
+import { t } from '../translations';
+import LanguageToggle from './LanguageToggle';
 
 const BookIcon = () => (
   <svg
@@ -24,19 +28,21 @@ const BookIcon = () => (
 );
 
 const Navbar = () => {
+  const { currentLanguage, isRTL } = useLanguage();
+  
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Hotels', path: '/rooms' },
-    { name: 'Experience', path: '/' },
-    { name: 'About', path: '/' },
+    { name: t('nav.home', currentLanguage), path: '/' },
+    { name: t('nav.hotels', currentLanguage), path: '/rooms' },
+    { name: t('nav.experience', currentLanguage), path: '/' },
+    { name: t('nav.about', currentLanguage), path: '/' },
   ];
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { openSignIn } = useClerk();
-  const { user } = useUser();
-  const navigate = useNavigate();
+
   const location = useLocation();
+  const {user,navigate,isOwner,setShowHotelReg}=useAppContext();
 
   useEffect(() => {
     if (location.pathname !== '/') {
@@ -95,9 +101,9 @@ const Navbar = () => {
             className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${
               isScrolled ? 'text-black' : 'text-white'
             } transition-all`}
-            onClick={() => navigate('/owner')}
+            onClick={() => isOwner?navigate('/owner') : setShowHotelReg(true)}
           >
-            Dashboard
+            {isOwner ? t('nav.dashboard', currentLanguage) : t('nav.listYourHotel', currentLanguage)}
           </button>
         )}
       </div>
@@ -110,6 +116,9 @@ const Navbar = () => {
           className={`${isScrolled && 'invert'} h-7 transition-all duration-500`}
         />
 
+        {/* Language Toggle */}
+        <LanguageToggle />
+
         {user ? (
           <>
             <button
@@ -119,85 +128,90 @@ const Navbar = () => {
               }`}
             >
               <BookIcon />
-              My Bookings
+              {t('nav.myBookings', currentLanguage)}
             </button>
             <UserButton />
           </>
         ) : (
           <button
             onClick={openSignIn}
-            className={`px-8 py-2.5 rounded-full ml-4 transition-all duration-500 ${
-              isScrolled ? 'text-white bg-black' : 'bg-white text-black'
-            }`}
+            className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${
+              isScrolled ? 'text-black' : 'text-white'
+            } transition-all ${isRTL ? 'font-arabic' : ''}`}
           >
-            Login
+            {t('common.signIn') || 'Sign In'}
           </button>
         )}
       </div>
 
       {/* Mobile Menu Button */}
-      <div className="flex items-center gap-3 md:hidden">
-        {user && <UserButton />}
+      <button
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        className="md:hidden"
+      >
         <img
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
           src={assets.menuIcon}
-          alt=""
-          className={`${isScrolled && 'invert'} h-4`}
+          alt="menu"
+          className={`h-6 ${isScrolled && 'invert'}`}
         />
-      </div>
+      </button>
 
       {/* Mobile Menu */}
-      <div
-        className={`fixed top-0 left-0 w-full h-screen bg-white text-base flex flex-col md:hidden items-center justify-center gap-6 font-medium text-gray-800 transition-all duration-500 ${
-          isMenuOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
-      >
-        <button className="absolute top-4 right-4" onClick={() => setIsMenuOpen(false)}>
-          <img src={assets.closeIcon} alt="close icon" className="h-6.5" />
-        </button>
+      {isMenuOpen && (
+        <div className="absolute top-full left-0 w-full bg-white shadow-lg md:hidden">
+          <div className="flex flex-col p-4 space-y-4">
+            {navLinks.map((link, i) => (
+              <a
+                key={i}
+                href={link.path}
+                className="text-gray-700 hover:text-gray-900 transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {link.name}
+              </a>
+            ))}
+            
+            {/* Language Toggle in Mobile Menu */}
+            <div className="flex justify-center py-2">
+              <LanguageToggle />
+            </div>
 
-        {navLinks.map((link, i) => (
-          <a key={i} href={link.path} onClick={() => setIsMenuOpen(false)}>
-            {link.name}
-          </a>
-        ))}
-
-        {user && (
-          <>
-            <button
-              onClick={() => {
-                navigate('/my-bookings');
-                setIsMenuOpen(false);
-              }}
-              className="flex items-center gap-2"
-            >
-              <BookIcon />
-              My Bookings
-            </button>
-            <button
-              className="border px-4 py-1 text-sm font-light rounded-full cursor-pointer transition-all"
-              onClick={() => {
-                navigate('/owner');
-                setIsMenuOpen(false);
-              }}
-            >
-              Dashboard
-            </button>
-          </>
-        )}
-
-        {!user && (
-          <button
-            onClick={() => {
-              openSignIn();
-              setIsMenuOpen(false);
-            }}
-            className="bg-black text-white px-8 py-2.5 rounded-full transition-all duration-500"
-          >
-            Login
-          </button>
-        )}
-      </div>
+            {user ? (
+              <>
+                <button
+                  onClick={() => {
+                    navigate('/my-bookings');
+                    setIsMenuOpen(false);
+                  }}
+                  className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-gray-900 transition-colors"
+                >
+                  <BookIcon />
+                  {t('nav.myBookings', currentLanguage)}
+                </button>
+                <button
+                  onClick={() => {
+                    isOwner ? navigate('/owner') : setShowHotelReg(true);
+                    setIsMenuOpen(false);
+                  }}
+                  className="text-gray-700 hover:text-gray-900 transition-colors"
+                >
+                  {isOwner ? t('nav.dashboard', currentLanguage) : t('nav.listYourHotel', currentLanguage)}
+                </button>
+              </>
+            ) : (
+                              <button
+                  onClick={() => {
+                    openSignIn();
+                    setIsMenuOpen(false);
+                  }}
+                  className={`text-gray-700 hover:text-gray-900 transition-colors ${isRTL ? 'font-arabic' : ''}`}
+                >
+                  {t('common.signIn') || 'Sign In'}
+                </button>
+            )}
+          </div>
+        </div>
+      )}
     </nav>
   );
 };

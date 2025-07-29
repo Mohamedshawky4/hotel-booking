@@ -2,25 +2,32 @@ import React from 'react'
 import Title from './Title'
 import { testimonials } from '../assets/assets'
 import StarRaiting from './StarRaiting'
+import { useTranslation } from '../hooks/useTranslation';
 
 const Testimonial = () => {
+  const { t, isRTL } = useTranslation();
+  
   return (
-    <div className='flex flex-col items-center px-6 md:px-16 lg:px-24 xl:px-32 pt-20 pb-28 bg-gray-50'>
-        <Title title="What Our Guests Say" align="center" subTitle="Hear from our satisfied guests about their unforgettable experiences at our hotels." />
-         <div className="flex flex-wrap items-center  gap-6 mt-20 ">
+    <div className={`flex flex-col items-center px-6 md:px-16 lg:px-24 xl:px-32 pt-20 pb-28 bg-gray-50 ${isRTL ? 'text-right' : 'text-left'}`}>
+        <Title 
+          title={t('components.testimonials.title')} 
+          align="center" 
+          subTitle={t('components.testimonials.subtitle')} 
+        />
+         <div className="flex flex-wrap items-center gap-6 mt-20">
                 {testimonials.map((testimonial) => (
-                    <div key={testimonial.id} className="bg-white p-6 rounded-xl shadow max-w-xs">
-                        <div className="flex items-center gap-3">
+                    <div key={testimonial.id} className={`bg-white p-6 rounded-xl shadow max-w-xs ${isRTL ? 'font-arabic' : ''}`}>
+                        <div className={`flex items-center gap-3 ${isRTL ? 'rtl-flex-row-reverse' : ''}`}>
                             <img className="w-12 h-12 rounded-full" src={testimonial.image} alt={testimonial.name} />
                             <div>
-                                <p className="font-playfair text-xl">{testimonial.name}</p>
-                                <p className="text-gray-500">{testimonial.address}</p>
+                                <p className={`font-playfair text-xl ${isRTL ? 'font-arabic' : ''}`}>{testimonial.name}</p>
+                                <p className={`text-gray-500 ${isRTL ? 'font-arabic' : ''}`}>{testimonial.address}</p>
                             </div>
                         </div>
-                       <div className='flex items-center gap-1 mt-4'>
+                       <div className={`flex items-center gap-1 mt-4 ${isRTL ? 'rtl-flex-row-reverse' : ''}`}>
                            <StarRaiting rating={testimonial.rating} />
                        </div>
-                        <p className="text-gray-500 max-w-90 mt-4">"{testimonial.review}"</p>
+                        <p className={`text-gray-500 max-w-90 mt-4 ${isRTL ? 'font-arabic' : ''}`}>"{testimonial.review}"</p>
                     </div>
                 ))}
             </div>

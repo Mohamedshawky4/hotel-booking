@@ -1,16 +1,19 @@
 import React from 'react'
 import { assets } from '../assets/assets'
+import { useTranslation } from '../hooks/useTranslation';
 
 const Footer = () => {
+  const { t, isRTL } = useTranslation();
+  
   return (
-     <div className='text-gray-500/80 pt-8 px-6 md:px-16 lg:px-24 xl:px-32 bg-[#F6F9FC] mt-20'>
-            <div className='flex flex-wrap justify-between gap-12 md:gap-6'>
+     <div className={`text-gray-500/80 pt-8 px-6 md:px-16 lg:px-24 xl:px-32 bg-[#F6F9FC] mt-20 ${isRTL ? 'text-right' : 'text-left'}`}>
+            <div className={`flex flex-wrap justify-between gap-12 md:gap-6 ${isRTL ? 'rtl-flex-row-reverse' : ''}`}>
                 <div className='max-w-80'>
                     <img src={assets.logo} alt="logo" className='mb-4 h-8 md:h-9 invert opacity-80'  />
-                    <p className='text-sm'>
-                        discover the world with us. We offer a wide range of accommodations, from luxury hotels to cozy apartments, ensuring you find the perfect place for your stay.
+                    <p className={`text-sm ${isRTL ? 'font-arabic' : ''}`}>
+                        {t('footer.discoverWorld')}
                          </p>
-                    <div className='flex items-center gap-3 mt-4'>
+                    <div className={`flex items-center gap-3 mt-4 ${isRTL ? 'rtl-flex-row-reverse' : ''}`}>
                         {/* Instagram */}
                         <img src={assets.instagramIcon} alt="instagram icon" className='w-6' />
                         {/* Facebook */}
@@ -25,49 +28,47 @@ const Footer = () => {
                 </div>
 
                 <div>
-                    <p className='font-playfair text-lg text-gray-800'>COMPANY</p>
-                    <ul className='mt-3 flex flex-col gap-2 text-sm'>
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Careers</a></li>
-                        <li><a href="#">Press</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Partners</a></li>
+                    <p className={`font-playfair text-lg text-gray-800 ${isRTL ? 'font-arabic' : ''}`}>{t('footer.company')}</p>
+                    <ul className={`mt-3 flex flex-col gap-2 text-sm ${isRTL ? 'font-arabic' : ''}`}>
+                        <li><a href="#">{t('footer.about')}</a></li>
+                        <li><a href="#">{t('footer.careers')}</a></li>
+                        <li><a href="#">{t('footer.press')}</a></li>
+                        <li><a href="#">{t('footer.blog')}</a></li>
+                        <li><a href="#">{t('footer.partners')}</a></li>
                     </ul>
                 </div>
 
                 <div>
-                    <p className='font-playfair text-lg text-gray-800'>SUPPORT</p>
-                    <ul className='mt-3 flex flex-col gap-2 text-sm'>
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="#">Safety Information</a></li>
-                        <li><a href="#">Cancellation Options</a></li>
-                        <li><a href="#">Contact Us</a></li>
-                        <li><a href="#">Accessibility</a></li>
+                    <p className={`font-playfair text-lg text-gray-800 ${isRTL ? 'font-arabic' : ''}`}>{t('footer.support')}</p>
+                    <ul className={`mt-3 flex flex-col gap-2 text-sm ${isRTL ? 'font-arabic' : ''}`}>
+                        <li><a href="#">{t('footer.helpCenter')}</a></li>
+                        <li><a href="#">{t('footer.contactUs')}</a></li>
+                        <li><a href="#">{t('footer.privacyPolicy')}</a></li>
+                        <li><a href="#">{t('footer.termsOfService')}</a></li>
                     </ul>
                 </div>
 
-                <div className='max-w-80'>
-                    <p className='text-lg text-gray-800 font-playfair'>STAY UPDATED</p>
-                    <p className='mt-3 text-sm'>
-                        Subscribe to our newsletter for inspiration and special offers.
-                    </p>
-                    <div className='flex items-center mt-4'>
-                        <input type="text" className='bg-white rounded-l border border-gray-300 h-9 px-3 outline-none' placeholder='Your email' />
-                        <button className='flex items-center justify-center bg-black h-9 w-9 aspect-square rounded-r'>
-                            {/* Arrow icon */}
-                            <img src={assets.arrowIcon} alt="arrow icon" className='w-4 invert' />
-                              </button>
-                    </div>
+                <div>
+                    <p className={`font-playfair text-lg text-gray-800 ${isRTL ? 'font-arabic' : ''}`}>{t('footer.legal')}</p>
+                    <ul className={`mt-3 flex flex-col gap-2 text-sm ${isRTL ? 'font-arabic' : ''}`}>
+                        <li><a href="#">{t('footer.privacy')}</a></li>
+                        <li><a href="#">{t('footer.terms')}</a></li>
+                        <li><a href="#">{t('footer.cookies')}</a></li>
+                        <li><a href="#">{t('footer.licenses')}</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <p className={`font-playfair text-lg text-gray-800 ${isRTL ? 'font-arabic' : ''}`}>{t('footer.settings')}</p>
+                    <ul className={`mt-3 flex flex-col gap-2 text-sm ${isRTL ? 'font-arabic' : ''}`}>
+                        <li><a href="#">{t('footer.preferences')}</a></li>
+                        <li><a href="#">{t('footer.yourData')}</a></li>
+                        <li><a href="#">{t('footer.cookiesSettings')}</a></li>
+                    </ul>
                 </div>
             </div>
-            <hr className='border-gray-300 mt-8' />
-            <div className='flex flex-col md:flex-row gap-2 items-center justify-between py-5'>
-                <p>© {new Date().getFullYear()} quickstay. All rights reserved.</p>
-                <ul className='flex items-center gap-4'>
-                    <li><a href="#">Privacy</a></li>
-                    <li><a href="#">Terms</a></li>
-                    <li><a href="#">Sitemap</a></li>
-                </ul>
+            <div className={`border-t border-gray-300 mt-8 pt-8 text-center ${isRTL ? 'font-arabic' : ''}`}>
+                <p className='text-sm'>&copy; 2024 Hotel Booking. {t('footer.allRightsReserved') || 'All rights reserved.'}</p>
             </div>
         </div>
   )
