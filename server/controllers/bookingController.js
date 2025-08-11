@@ -1,6 +1,7 @@
 import Booking from "../models/Bookings.js";
 import Hotel from "../models/Hotel.js";
 import Room from "../models/Room.js";
+import availabilityCache from "../utils/cache.js";
 
 //check if rooom available for booking
 export const checkAvailability = async ({checkInDate,checkOutDate,room}) => {
@@ -54,6 +55,10 @@ export const createBooking = async (req, res) => {
             checkOutDate,
             totalPrice
         });
+        
+        // Clear availability cache for this room
+        availabilityCache.clearRoom(room);
+        
         res.json({ success: true, message: "Booking created successfully" });
     } catch (error) {
         res.json({ success: false, message: error.message });
@@ -206,6 +211,9 @@ export const modifyBooking = async (req, res) => {
         
         await booking.save();
         
+        // Clear availability cache for this room
+        availabilityCache.clearRoom(booking.room);
+        
         res.json({ 
             success: true, 
             message: "Booking modified successfully",
@@ -271,6 +279,9 @@ export const cancelBooking = async (req, res) => {
         booking.updatedAt = new Date();
         
         await booking.save();
+        
+        // Clear availability cache for this room
+        availabilityCache.clearRoom(booking.room);
         
         res.json({ 
             success: true, 

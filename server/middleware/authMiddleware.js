@@ -4,7 +4,7 @@ import User from "../models/User.js";
 export const protect=async(req,res,next)=>{
         const {userId}=req.auth;
         if(!userId){
-            res.json({success:false,message:"You are not logged in"})
+            return res.json({success:false,message:"You are not logged in"})
         }
         else{
             const user=await User.findById(userId);

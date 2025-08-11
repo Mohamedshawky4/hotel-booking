@@ -6,7 +6,8 @@ const connectDB = async () => {
       console.log("Mongoose is connected");
     });
 
-   await mongoose.connect(process.env.MONGODB_URI, {
+   const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/hotel-booking';
+   await mongoose.connect(mongoURI, {
   serverSelectionTimeoutMS: 30000, // default is 30s
 });
 

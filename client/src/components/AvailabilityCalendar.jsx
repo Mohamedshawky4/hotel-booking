@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from '../hooks/useTranslation';
+import axios from 'axios';
 
 const AvailabilityCalendar = ({ roomId, onDateSelect, selectedDates = {} }) => {
     const { t, isRTL } = useTranslation();
@@ -112,21 +113,20 @@ const AvailabilityCalendar = ({ roomId, onDateSelect, selectedDates = {} }) => {
         
         setLoading(true);
         try {
-            // This would be replaced with actual API call
-            // const response = await axios.get(`/api/rooms/${roomId}/availability`);
-            // setBookedDates(response.data.bookedDates);
+            const month = currentMonth.getMonth() + 1; // getMonth() returns 0-11
+            const year = currentMonth.getFullYear();
             
-            // Mock data for now
-            const mockBookedDates = [
-                '2024-12-25',
-                '2024-12-26',
-                '2024-12-27',
-                '2025-01-15',
-                '2025-01-16'
-            ];
-            setBookedDates(mockBookedDates);
+            const response = await axios.get(`/api/rooms/availability/${roomId}?month=${month}&year=${year}`);
+            
+            if (response.data.success) {
+                setBookedDates(response.data.bookedDates);
+            } else {
+                console.error('Error fetching availability:', response.data.message);
+            }
         } catch (error) {
             console.error('Error fetching availability:', error);
+            // Fallback to empty array if API fails
+            setBookedDates([]);
         } finally {
             setLoading(false);
         }

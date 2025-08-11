@@ -33,6 +33,9 @@ const AllRooms = () => {
     const { t, isRTL } = useTranslation();
     const [openFilters, setOpenFilters] = useState(false)
     
+    // Debug: Log rooms data
+    console.log('AllRooms - Rooms data:', rooms);
+    
     // Enhanced filter state
     const [selectedFilters, setSelectedFilters] = useState({
         roomType: [],
@@ -56,22 +59,22 @@ const AllRooms = () => {
     const priceRanges = ["$0 - $500", "$500 - $1000", "$1000 - $1500", "$1500 - $2000", "$2000 - $3000"]
     
     const amenities = [
-      'Free WiFi',
-      'Free Breakfast', 
-      'Pool',
-      'Room Service',
-      'Air Conditioning',
-      'TV',
-      'Mini Bar',
-      'Balcony'
+      t('allRooms.amenities.freeWifi'),
+      t('allRooms.amenities.freeBreakfast'), 
+      t('allRooms.amenities.pool'),
+      t('allRooms.amenities.roomService'),
+      t('allRooms.amenities.airConditioning'),
+      t('allRooms.amenities.tv'),
+      t('allRooms.amenities.miniBar'),
+      t('allRooms.amenities.balcony')
     ]
     
     const sortOptions = [
       t('allRooms.priceLowToHigh'),
       t('allRooms.priceHighToLow'), 
       t('allRooms.newestFirst'),
-      'Rating High to Low',
-      'Distance from City Center'
+      t('allRooms.ratingHighToLow'),
+      t('allRooms.distanceFromCenter')
     ]
 
     const handleFilterChange = (checked,value,type) => {
@@ -262,7 +265,7 @@ const AllRooms = () => {
                                 onClick={clearAllFilters}
                                 className="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full hover:bg-red-200"
                             >
-                                {t('common.clearAll') || 'Clear All'}
+                                {t('common.clearAll')}
                             </button>
                         </div>
                     )}
@@ -272,13 +275,13 @@ const AllRooms = () => {
                 {filteredRooms.length === 0 ? (
                     <div className={`text-center py-20 ${isRTL ? 'font-arabic' : ''}`}>
                         <p className="text-gray-500 text-lg mb-4">
-                            {t('allRooms.noResults') || 'No rooms found matching your criteria'}
+                            {t('allRooms.noResults')}
                         </p>
                         <button 
                             onClick={clearAllFilters}
                             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                         >
-                            {t('allRooms.clearFilters') || 'Clear Filters'}
+                            {t('allRooms.clearFilters')}
                         </button>
                     </div>
                 ) : (
@@ -295,9 +298,9 @@ const AllRooms = () => {
                                     {room.hotel.name}
                                 </p>
                                 <div className={`flex items-centers ${isRTL ? 'rtl-flex-row-reverse' : ''}`}>
-                                    <StarRaiting rating={room.rating} />
+                                    <StarRaiting rating={room.rating || 0} />
                                     <p className={`ml-2 ${isRTL ? 'font-arabic mr-2 ml-0' : ''}`}>
-                                        {room.rating} ({room.reviewCount || 200}+ {t('roomDetails.reviews')})
+                                        {room.rating || 0} ({room.reviewCount || 0}+ {t('roomDetails.reviews')})
                                     </p>
                                 </div>
 
@@ -328,7 +331,7 @@ const AllRooms = () => {
                                         onClick={() => {navigate(`/rooms/${room._id}`); scrollTo(0, 0);}}
                                         className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                                     >
-                                        {t('common.viewDetails') || 'View Details'}
+                                        {t('common.viewDetails')}
                                     </button>
                                 </div>
                             </div>
@@ -345,10 +348,10 @@ const AllRooms = () => {
                     </p>
                     <div className='text-xs cursor-pointer'>
                         <span onClick={() => setOpenFilters(!openFilters)} className='lg:hidden'>
-                            {openFilters ? t('common.hide') || 'Hide' : t('common.show') || 'Show'}
+                            {openFilters ? t('common.hide') : t('common.show')}
                         </span>
                         <span onClick={clearAllFilters} className='hidden lg:block text-blue-600 hover:text-blue-800'>
-                            {t('common.clearAll') || 'Clear All'}
+                            {t('common.clearAll')}
                         </span>
                     </div>
                 </div>
@@ -357,7 +360,7 @@ const AllRooms = () => {
                     {/* Date Range Filter */}
                     <div className='px-5 pt-5 border-b border-gray-100'>
                         <p className={`font-medium text-gray-800 pb-2 ${isRTL ? 'font-arabic' : ''}`}>
-                            {t('allRooms.checkInOut') || 'Check-in/Check-out'}
+                            {t('allRooms.dateRange')}
                         </p>
                         <div className="space-y-2">
                             <input
@@ -380,7 +383,7 @@ const AllRooms = () => {
                     {/* Guest Count Filter */}
                     <div className='px-5 pt-5 border-b border-gray-100'>
                         <p className={`font-medium text-gray-800 pb-2 ${isRTL ? 'font-arabic' : ''}`}>
-                            {t('allRooms.guests') || 'Guests'}
+                            {t('allRooms.guestCount')}
                         </p>
                         <div className="flex items-center gap-2">
                             <button
@@ -402,11 +405,11 @@ const AllRooms = () => {
                     {/* Location Filter */}
                     <div className='px-5 pt-5 border-b border-gray-100'>
                         <p className={`font-medium text-gray-800 pb-2 ${isRTL ? 'font-arabic' : ''}`}>
-                            {t('allRooms.location') || 'Location'}
+                            {t('allRooms.location')}
                         </p>
                         <input
                             type="text"
-                            placeholder={t('allRooms.searchLocation') || 'Search by city or address'}
+                            placeholder={t('allRooms.searchLocation')}
                             value={selectedFilters.location}
                             onChange={(e) => handleLocationChange(e.target.value)}
                             className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
@@ -416,7 +419,7 @@ const AllRooms = () => {
                     {/* Rating Filter */}
                     <div className='px-5 pt-5 border-b border-gray-100'>
                         <p className={`font-medium text-gray-800 pb-2 ${isRTL ? 'font-arabic' : ''}`}>
-                            {t('allRooms.minimumRating') || 'Minimum Rating'}
+                            {t('allRooms.minRating')}
                         </p>
                         <div className="flex items-center gap-2">
                             {[1, 2, 3, 4, 5].map(rating => (
