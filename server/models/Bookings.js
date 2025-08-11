@@ -10,6 +10,10 @@ const bookingSchema = new mongoose.Schema({
     status:{type : String,enum:["pending","confirmed","cancelled"],default:"pending"},
     paymentMethod:{type : String,required : true ,default:"Pay At Hotel"},
     isPaid:{type : Boolean,default:false},
+    cancellationFee:{type : Number,default:0},
+    cancelledAt:{type : Date},
+    specialRequests:{type : String,default:""},
+    notes:{type : String,default:""},
     
 },{timestamps : true});
 const  Booking= mongoose.model("Booking",bookingSchema);

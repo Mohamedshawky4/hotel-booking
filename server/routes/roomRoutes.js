@@ -1,14 +1,19 @@
 import express from 'express';
-import upload from '../middleware/uploadMiddleware.js';
+import { getRooms, getRoomsByOwner, addRoom, toggleRoomAvailability, getRoomAvailability, updateRoom, deleteRoom } from '../controllers/roomController.js';
 import { protect } from '../middleware/authMiddleware.js';
-import { createRoom, getOwnerRooms, getRooms, toggleRoomAvailability } from '../controllers/roomController.js';
+import { upload } from '../middleware/uploadMiddleware.js';
 
 const roomRouter = express.Router();
-roomRouter.post("/", upload.array("images"),protect,createRoom);
+
+// Public routes
 roomRouter.get("/", getRooms);
-roomRouter.get("/owner", protect,getOwnerRooms);
-roomRouter.post("/toggle-availability", protect,toggleRoomAvailability);
+roomRouter.get("/availability/:roomId", getRoomAvailability);
 
-
+// Protected routes (require authentication)
+roomRouter.get("/owner", protect, getRoomsByOwner);
+roomRouter.post("/add", protect, upload.array('images', 5), addRoom);
+roomRouter.post("/toggle-availability", protect, toggleRoomAvailability);
+roomRouter.put("/:roomId", protect, upload.array('images', 5), updateRoom);
+roomRouter.delete("/:roomId", protect, deleteRoom);
 
 export default roomRouter;
