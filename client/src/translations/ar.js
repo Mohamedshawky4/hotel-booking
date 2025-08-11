@@ -92,7 +92,7 @@ export const ar = {
     guestCount: 'عدد الضيوف',
     location: 'الموقع',
     minRating: 'الحد الأدنى للتقييم',
-    amenities: 'المرافق',
+    amenitiesLabel: 'المرافق',
     searchLocation: 'البحث بالمدينة أو العنوان',
     amenities: {
       freeWifi: 'واي فاي مجاني',

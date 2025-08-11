@@ -92,7 +92,7 @@ export const en = {
     guestCount: 'Guest Count',
     location: 'Location',
     minRating: 'Minimum Rating',
-    amenities: 'Amenities',
+    amenitiesLabel: 'Amenities',
     searchLocation: 'Search by city or address',
     amenities: {
       freeWifi: 'Free WiFi',

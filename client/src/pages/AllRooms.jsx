@@ -456,7 +456,7 @@ const AllRooms = () => {
                     {/* Amenities Filter */}
                     <div className='px-5 pt-5 border-b border-gray-100'>
                         <p className={`font-medium text-gray-800 pb-2 ${isRTL ? 'font-arabic' : ''}`}>
-                            {t('allRooms.amenities') || 'Amenities'}
+                            {t('allRooms.amenitiesLabel')}
                         </p>
                         {amenities.map((amenity, index) => (
                             <CheckBox 
