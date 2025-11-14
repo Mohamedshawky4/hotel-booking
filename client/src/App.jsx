@@ -13,14 +13,18 @@ import AddRoom from './pages/hotelOwner/AddRoom'
 import ListRoom from './pages/hotelOwner/ListRoom'
 import {Toaster} from 'react-hot-toast'
 import { useAppContext } from './context/AppContext'
+import AdminLogin from './pages/admin/AdminLogin'
+import AdminDashboard from './pages/admin/AdminDashboard'
+import UserManagement from './pages/admin/UserManagement'
 
 const App = () => {
   const isOwnerPath=useLocation().pathname.includes('owner')
+  const isAdminPath=useLocation().pathname.includes('admin')
   const {showHotelReg}=useAppContext();
   return (
     <div>
       <Toaster />
-      {!isOwnerPath && <Navbar />}
+      {!isOwnerPath && !isAdminPath && <Navbar />}
       {showHotelReg && <HotelReg />}
       <div className='min-h-[70vh]'>
        <Routes>
@@ -33,10 +37,15 @@ const App = () => {
           <Route path='add-room' element={<AddRoom />} />
           <Route path='list-room' element={<ListRoom />} />
         </Route>
+        
+        {/* Admin Routes */}
+        <Route path='/admin/login' element={<AdminLogin />} />
+        <Route path='/admin/dashboard' element={<AdminDashboard />} />
+        <Route path='/admin/users' element={<UserManagement />} />
 
        </Routes>
       </div>
-      <Footer />
+      {!isAdminPath && <Footer />}
     </div>
   )
 }

@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 const bookingSchema = new mongoose.Schema({ 
-    user:{type : String,required : true , ref: "User"},
-    hotel:{type : String,required : true , ref: "Hotel"},
-    room:{type : String,required : true , ref: "Room"},
+    user:{type : mongoose.Schema.Types.ObjectId,required : true , ref: "User"},
+    hotel:{type : mongoose.Schema.Types.ObjectId,required : true , ref: "Hotel"},
+    room:{type : mongoose.Schema.Types.ObjectId,required : true , ref: "Room"},
     checkInDate:{type : Date,required : true},
     checkOutDate:{type : Date,required : true},
     totalPrice:{type : Number,required : true},

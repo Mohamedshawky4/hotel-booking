@@ -12,7 +12,7 @@ export const getUserData =async (req, res) => {
 //store searched cities
 export const storeRecentSearchedCities =async (req, res) => {
     try{
-        const {recentSearchedCity} = req.body;
+        const {recentSearchedCity} = req.body;  
         const user = req.user;
         if(user.recentSearchedCities.length<3){
             user.recentSearchedCities.push(recentSearchedCity);

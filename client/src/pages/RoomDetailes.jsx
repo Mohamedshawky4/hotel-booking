@@ -70,6 +70,7 @@ const RoomDetailes = () => {
        const room = rooms.find(room =>room._id===id)
        room && setRoom(room)
        room&& setMainImage(room.images[0])
+       console.log(room)
     }, [rooms])
 
   return room && (
@@ -163,7 +164,7 @@ const RoomDetailes = () => {
         {/* host */}
         <div className={`flex flex-col items-start gap-4 ${isRTL ? 'rtl-items-end' : ''}`}>
             <div className={`flex gap-4 ${isRTL ? 'rtl-flex-row-reverse' : ''}`}>
-                <img src={room.hotel.owner.image} alt="host" className='h-14 w-14 md:h-18 md:w-18 rounded-full'/>
+                {/* <img src={room.hotel.owner.image} alt="host" className='h-14 w-14 md:h-18 md:w-18 rounded-full'/> */}
                 <div>
                     <p className={`text-lg md:text-xl ${isRTL ? 'font-arabic' : ''}`}>{t('roomDetails.hostedBy')} {room.hotel.name}</p>
                     <div className={`flex items-center mt-1 ${isRTL ? 'rtl-flex-row-reverse' : ''}`}>
